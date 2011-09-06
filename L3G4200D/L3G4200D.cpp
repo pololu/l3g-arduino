@@ -1,7 +1,6 @@
 #include <L3G4200D.h>
 #include <Wire.h>
 #include <math.h>
-#include <vector.h>
 
 // Defines ////////////////////////////////////////////////////////////////
 
@@ -22,7 +21,7 @@ void L3G4200D::enableDefault(void)
 // Writes a gyro register
 void L3G4200D::writeReg(byte reg, byte value)
 {
-	Wire.beginTransmission(MAG_ADDRESS);
+	Wire.beginTransmission(GYR_ADDRESS);
 	Wire.send(reg);
 	Wire.send(value);
 	Wire.endTransmission();
@@ -33,10 +32,10 @@ byte L3G4200D::readReg(byte reg)
 {
 	byte value;
 	
-	Wire.beginTransmission(MAG_ADDRESS);
+	Wire.beginTransmission(GYR_ADDRESS);
 	Wire.send(reg);
 	Wire.endTransmission();
-	Wire.requestFrom(MAG_ADDRESS, 1);
+	Wire.requestFrom(GYR_ADDRESS, 1);
 	value = Wire.receive();
 	Wire.endTransmission();
 	
@@ -65,4 +64,24 @@ void L3G4200D::read()
 	g.x = (xha << 8 | xla) >> 4;
 	g.y = (yha << 8 | yla) >> 4;
 	g.z = (zha << 8 | zla) >> 4;
+}
+
+void L3G4200D::vector_cross(const vector *a,const vector *b, vector *out)
+{
+  out->x = a->y*b->z - a->z*b->y;
+  out->y = a->z*b->x - a->x*b->z;
+  out->z = a->x*b->y - a->y*b->x;
+}
+
+float L3G4200D::vector_dot(const vector *a,const vector *b)
+{
+  return a->x*b->x+a->y*b->y+a->z*b->z;
+}
+
+void L3G4200D::vector_normalize(vector *a)
+{
+  float mag = sqrt(vector_dot(a,a));
+  a->x /= mag;
+  a->y /= mag;
+  a->z /= mag;
 }

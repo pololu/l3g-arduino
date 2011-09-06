@@ -1,6 +1,6 @@
 #ifndef L3G4200D_h
 #define L3G4200D_h
-#include <vector.h>
+
 #include <WProgram.h> // for byte data type
 
 // register addresses
@@ -39,6 +39,11 @@
 class L3G4200D
 {
 	public:
+		typedef struct vector
+		{
+			float x, y, z;
+		} vector;
+		
 		vector g; // gyro angular velocity readings
 
 		void enableDefault(void);
@@ -47,6 +52,11 @@ class L3G4200D
 		byte readReg(byte reg);
 		
 		void read(void);
+		
+		// vector functions
+		static void vector_cross(const vector *a, const vector *b, vector *out);
+		static float vector_dot(const vector *a,const vector *b);
+		static void vector_normalize(vector *a);
 };
 
 #endif
