@@ -61,9 +61,9 @@ void L3G4200D::read()
 	uint8_t zla = Wire.receive();
 	uint8_t zha = Wire.receive();
 
-	g.x = (xha << 8 | xla) >> 4;
-	g.y = (yha << 8 | yla) >> 4;
-	g.z = (zha << 8 | zla) >> 4;
+	g.x = xha << 8 | xla;
+	g.y = yha << 8 | yla;
+	g.z = zha << 8 | zla;
 }
 
 void L3G4200D::vector_cross(const vector *a,const vector *b, vector *out)
