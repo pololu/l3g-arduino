@@ -1,7 +1,7 @@
 h1. Arduino library for the Pololu L3G4200D carrier board
 
-Version: 1.0.0
-Release Date: 2011-09-14
+Version: 1.1.0
+Release Date: 2011-12-12
 "www.pololu.com":http://www.pololu.com/
 
 h2. Summary
@@ -53,3 +53,8 @@ h2. Library Reference
 - @void writeReg(byte reg, byte value)@ := Writes a gyro register with the given value. Register address constants are defined in L3G4200D.h.
 - @byte readReg(byte reg)@ := Reads a gyro register and returns the value read.
 - @void read(void)@ := Takes a reading from the gyro and stores the values in the vector @g@.
+
+h2. Version History
+
+* 1.1.0 (2011-12-12): Arduino 1.0 compatibility.
+* 1.0.0 (2011-09-14): Original release.

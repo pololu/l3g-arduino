@@ -22,8 +22,8 @@ void L3G4200D::enableDefault(void)
 void L3G4200D::writeReg(byte reg, byte value)
 {
 	Wire.beginTransmission(GYR_ADDRESS);
-	Wire.send(reg);
-	Wire.send(value);
+	Wire.write(reg);
+	Wire.write(value);
 	Wire.endTransmission();
 }
 
@@ -33,10 +33,10 @@ byte L3G4200D::readReg(byte reg)
 	byte value;
 	
 	Wire.beginTransmission(GYR_ADDRESS);
-	Wire.send(reg);
+	Wire.write(reg);
 	Wire.endTransmission();
 	Wire.requestFrom(GYR_ADDRESS, 1);
-	value = Wire.receive();
+	value = Wire.read();
 	Wire.endTransmission();
 	
 	return value;
@@ -48,18 +48,18 @@ void L3G4200D::read()
 	Wire.beginTransmission(GYR_ADDRESS);
 	// assert the MSB of the address to get the gyro 
 	// to do slave-transmit subaddress updating.
-	Wire.send(L3G4200D_OUT_X_L | (1 << 7)); 
+	Wire.write(L3G4200D_OUT_X_L | (1 << 7)); 
 	Wire.endTransmission();
 	Wire.requestFrom(GYR_ADDRESS, 6);
 
 	while (Wire.available() < 6);
 	
-	uint8_t xla = Wire.receive();
-	uint8_t xha = Wire.receive();
-	uint8_t yla = Wire.receive();
-	uint8_t yha = Wire.receive();
-	uint8_t zla = Wire.receive();
-	uint8_t zha = Wire.receive();
+	uint8_t xla = Wire.read();
+	uint8_t xha = Wire.read();
+	uint8_t yla = Wire.read();
+	uint8_t yha = Wire.read();
+	uint8_t zla = Wire.read();
+	uint8_t zha = Wire.read();
 
 	g.x = xha << 8 | xla;
 	g.y = yha << 8 | yla;
