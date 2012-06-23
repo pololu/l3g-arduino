@@ -3,6 +3,19 @@
 
 #include <Arduino.h> // for byte data type
 
+// device types
+
+#define L3G_DEVICE_AUTO 0
+#define L3G4200D_DEVICE 1
+#define L3GD20_DEVICE   2
+
+
+// SDO states
+
+#define L3G_SDO_LOW  0
+#define L3G_SDO_HIGH 1
+#define L3G_SDO_AUTO 2
+
 // register addresses
 
 #define L3G4200D_WHO_AM_I      0x0F
@@ -46,6 +59,8 @@ class L3G4200D
 		
 		vector g; // gyro angular velocity readings
 
+		void init(byte device = L3G_DEVICE_AUTO, byte sdo = L3G_SDO_AUTO);
+		
 		void enableDefault(void);
 		
 		void writeReg(byte reg, byte value);
@@ -57,6 +72,12 @@ class L3G4200D
 		static void vector_cross(const vector *a, const vector *b, vector *out);
 		static float vector_dot(const vector *a,const vector *b);
 		static void vector_normalize(vector *a);
+		
+	private:
+			byte _device; // chip type (DLH, DLM, or DLHC)
+			byte address;
+			
+			void autoDetectAddress(void);
 };
 
 #endif

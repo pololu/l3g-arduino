@@ -6,9 +6,40 @@
 
 // The Arduino two-wire interface uses a 7-bit number for the address, 
 // and sets the last bit correctly based on reads and writes
-#define GYR_ADDRESS (0xD2 >> 1)
+#define L3G4200D_ADDRESS_SDO_LOW  (0xD0 >> 1)
+#define L3G4200D_ADDRESS_SDO_HIGH (0xD2 >> 1)
+#define L3GD20_ADDRESS_SDO_LOW    (0xD4 >> 1)
+#define L3GD20_ADDRESS_SDO_HIGH   (0xD6 >> 1)
 
 // Public Methods //////////////////////////////////////////////////////////////
+
+void L3G4200D::init(byte device, byte sdo)
+{	
+	_device = device;
+	switch (_device)
+	{
+		case L3G4200D_DEVICE:
+			if (sdo == L3G_SDO_LOW)
+				address = L3G4200D_ADDRESS_SDO_LOW;
+			else if (sdo == L3G_SDO_HIGH)
+				address = L3G4200D_ADDRESS_SDO_HIGH;
+			else
+				autoDetectAddress();
+			break;	
+		
+		case L3GD20_DEVICE:
+			if (sdo == L3G_SDO_LOW)
+				address = L3GD20_ADDRESS_SDO_LOW;
+			else if (sdo == L3G_SDO_HIGH)
+				address = L3GD20_ADDRESS_SDO_HIGH;
+			else
+				autoDetectAddress();
+			break;	
+			
+		default:
+			autoDetectAddress();
+	}
+}
 
 // Turns on the L3G4200D's gyro and places it in normal mode.
 void L3G4200D::enableDefault(void)
@@ -21,7 +52,7 @@ void L3G4200D::enableDefault(void)
 // Writes a gyro register
 void L3G4200D::writeReg(byte reg, byte value)
 {
-	Wire.beginTransmission(GYR_ADDRESS);
+	Wire.beginTransmission(address);
 	Wire.write(reg);
 	Wire.write(value);
 	Wire.endTransmission();
@@ -32,10 +63,10 @@ byte L3G4200D::readReg(byte reg)
 {
 	byte value;
 	
-	Wire.beginTransmission(GYR_ADDRESS);
+	Wire.beginTransmission(address);
 	Wire.write(reg);
 	Wire.endTransmission();
-	Wire.requestFrom(GYR_ADDRESS, 1);
+	Wire.requestFrom(address, (byte)1);
 	value = Wire.read();
 	Wire.endTransmission();
 	
@@ -45,12 +76,12 @@ byte L3G4200D::readReg(byte reg)
 // Reads the 3 gyro channels and stores them in vector g
 void L3G4200D::read()
 {
-	Wire.beginTransmission(GYR_ADDRESS);
+	Wire.beginTransmission(address);
 	// assert the MSB of the address to get the gyro 
 	// to do slave-transmit subaddress updating.
 	Wire.write(L3G4200D_OUT_X_L | (1 << 7)); 
 	Wire.endTransmission();
-	Wire.requestFrom(GYR_ADDRESS, 6);
+	Wire.requestFrom(address, (byte)6);
 
 	while (Wire.available() < 6);
 	
@@ -84,4 +115,19 @@ void L3G4200D::vector_normalize(vector *a)
   a->x /= mag;
   a->y /= mag;
   a->z /= mag;
+}
+
+// Private Methods //////////////////////////////////////////////////////////////
+
+void L3G4200D::autoDetectAddress(void)
+{
+	// try each possible address and stop if reading WHO_AM_I returns the expected response
+	address = L3G4200D_ADDRESS_SDO_LOW;
+	if (readReg(L3G4200D_WHO_AM_I) == 0xD3) return;
+	address = L3G4200D_ADDRESS_SDO_HIGH;
+	if (readReg(L3G4200D_WHO_AM_I) == 0xD3) return;
+	address = L3GD20_ADDRESS_SDO_LOW;
+	if (readReg(L3G4200D_WHO_AM_I) == 0xD4) return;
+	address = L3GD20_ADDRESS_SDO_HIGH;
+	if (readReg(L3G4200D_WHO_AM_I) == 0xD4) return;
 }

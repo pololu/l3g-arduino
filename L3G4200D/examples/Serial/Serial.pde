@@ -6,6 +6,7 @@ L3G4200D gyro;
 void setup() {
   Serial.begin(9600);
   Wire.begin();
+  gyro.init();
   gyro.enableDefault();
 }
 
