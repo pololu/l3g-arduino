@@ -59,7 +59,7 @@ class L3G4200D
 		
 		vector g; // gyro angular velocity readings
 
-		void init(byte device = L3G_DEVICE_AUTO, byte sdo = L3G_SDO_AUTO);
+		bool init(byte device = L3G_DEVICE_AUTO, byte sdo = L3G_SDO_AUTO);
 		
 		void enableDefault(void);
 		
@@ -77,7 +77,7 @@ class L3G4200D
 			byte _device; // chip type (DLH, DLM, or DLHC)
 			byte address;
 			
-			void autoDetectAddress(void);
+			bool autoDetectAddress(void);
 };
 
 #endif

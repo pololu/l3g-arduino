@@ -13,31 +13,43 @@
 
 // Public Methods //////////////////////////////////////////////////////////////
 
-void L3G4200D::init(byte device, byte sdo)
+bool L3G4200D::init(byte device, byte sdo)
 {	
 	_device = device;
 	switch (_device)
 	{
 		case L3G4200D_DEVICE:
 			if (sdo == L3G_SDO_LOW)
+			{
 				address = L3G4200D_ADDRESS_SDO_LOW;
+				return true;
+			}
 			else if (sdo == L3G_SDO_HIGH)
+			{
 				address = L3G4200D_ADDRESS_SDO_HIGH;
+				return true;
+			}
 			else
-				autoDetectAddress();
+				return autoDetectAddress();
 			break;	
 		
 		case L3GD20_DEVICE:
 			if (sdo == L3G_SDO_LOW)
+			{
 				address = L3GD20_ADDRESS_SDO_LOW;
+				return true;
+			}
 			else if (sdo == L3G_SDO_HIGH)
+			{
 				address = L3GD20_ADDRESS_SDO_HIGH;
+				return true;
+			}
 			else
-				autoDetectAddress();
+				return autoDetectAddress();
 			break;	
 			
 		default:
-			autoDetectAddress();
+			return autoDetectAddress();
 	}
 }
 
@@ -119,15 +131,17 @@ void L3G4200D::vector_normalize(vector *a)
 
 // Private Methods //////////////////////////////////////////////////////////////
 
-void L3G4200D::autoDetectAddress(void)
+bool L3G4200D::autoDetectAddress(void)
 {
 	// try each possible address and stop if reading WHO_AM_I returns the expected response
 	address = L3G4200D_ADDRESS_SDO_LOW;
-	if (readReg(L3G4200D_WHO_AM_I) == 0xD3) return;
+	if (readReg(L3G4200D_WHO_AM_I) == 0xD3) return true;
 	address = L3G4200D_ADDRESS_SDO_HIGH;
-	if (readReg(L3G4200D_WHO_AM_I) == 0xD3) return;
+	if (readReg(L3G4200D_WHO_AM_I) == 0xD3) return true;
 	address = L3GD20_ADDRESS_SDO_LOW;
-	if (readReg(L3G4200D_WHO_AM_I) == 0xD4) return;
+	if (readReg(L3G4200D_WHO_AM_I) == 0xD4) return true;
 	address = L3GD20_ADDRESS_SDO_HIGH;
-	if (readReg(L3G4200D_WHO_AM_I) == 0xD4) return;
+	if (readReg(L3G4200D_WHO_AM_I) == 0xD4) return true;
+	
+	return false;
 }
