@@ -6,7 +6,13 @@ Release Date: 2011-07-06
 
 h2. Summary
 
-This is a library for the "Arduino":http://pololu.com/catalog/product/2191 that interfaces with the Pololu "L3G4200D 3-axis gyro carrier":http://www.pololu.com/catalog/product/1272 and "MinIMU-9 v2 L3GD20 and LSM303DLHC carrier":http://www.pololu.com/catalog/product/1268. (It also works with the older "MinIMU-9 L3G4200D and LSM303DLM carrier":http://www.pololu.com/catalog/product/1265 and "MinIMU-9 L3G4200D and LSM303DLH carrier":http://www.pololu.com/catalog/product/1264). It makes it simple to read the raw gyro data from the L3G4200D and L3GD20 gyros on these boards.
+This is a library for the "Arduino":http://pololu.com/catalog/product/2191 that interfaces with L3G4200D and L3GD20 gyros on Pololu boards. It makes it simple to read the raw gyro data from these boards:
+
+* "L3G4200D 3-axis gyro carrier":http://www.pololu.com/catalog/product/1272
+* "MinIMU-9 v2 L3GD20 and LSM303DLHC carrier":http://www.pololu.com/catalog/product/1268
+* "MinIMU-9 L3G4200D and LSM303DLM carrier":http://www.pololu.com/catalog/product/1265 (discontinued)
+* "MinIMU-9 L3G4200D and LSM303DLH carrier":http://www.pololu.com/catalog/product/1264 (discontinued)
+
 
 h2. Getting Started
 
@@ -52,6 +58,10 @@ h2. Library Reference
 - @void writeReg(byte reg, byte value)@ := Writes a gyro register with the given value. Register address constants are defined in L3G.h.
 - @byte readReg(byte reg)@ := Reads a gyro register and returns the value read.
 - @void read(void)@ := Takes a reading from the gyro and stores the values in the vector @g@.
+
+h3. Differences from the L3G4200D library
+
+This library is very similar to our earlier "L3G4200D":https://github.com/pololu/L3G4200D library, which is not compatible with the L3GD20. Besides the name change, the main difference in this library is that you need to call the @init()@ function before using any of the other library functions, typically from within the Arduino @setup()@ function. While the older library only works with the Pololu boards' default gyro slave address of 1101001b, this library allows you to specify the slave address with the @init()@ function.
 
 h2. Version History
 
