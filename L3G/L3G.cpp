@@ -1,4 +1,4 @@
-#include <L3G4200D.h>
+#include <L3G.h>
 #include <Wire.h>
 #include <math.h>
 
@@ -13,7 +13,7 @@
 
 // Public Methods //////////////////////////////////////////////////////////////
 
-bool L3G4200D::init(byte device, byte sdo)
+bool L3G::init(byte device, byte sdo)
 {	
 	_device = device;
 	switch (_device)
@@ -53,16 +53,16 @@ bool L3G4200D::init(byte device, byte sdo)
 	}
 }
 
-// Turns on the L3G4200D's gyro and places it in normal mode.
-void L3G4200D::enableDefault(void)
+// Turns on the L3G's gyro and places it in normal mode.
+void L3G::enableDefault(void)
 {
 	// 0x0F = 0b00001111
 	// Normal power mode, all axes enabled
-	writeReg(L3G4200D_CTRL_REG1, 0x0F);
+	writeReg(L3G_CTRL_REG1, 0x0F);
 }
 
 // Writes a gyro register
-void L3G4200D::writeReg(byte reg, byte value)
+void L3G::writeReg(byte reg, byte value)
 {
 	Wire.beginTransmission(address);
 	Wire.write(reg);
@@ -71,7 +71,7 @@ void L3G4200D::writeReg(byte reg, byte value)
 }
 
 // Reads a gyro register
-byte L3G4200D::readReg(byte reg)
+byte L3G::readReg(byte reg)
 {
 	byte value;
 	
@@ -86,12 +86,12 @@ byte L3G4200D::readReg(byte reg)
 }
 
 // Reads the 3 gyro channels and stores them in vector g
-void L3G4200D::read()
+void L3G::read()
 {
 	Wire.beginTransmission(address);
 	// assert the MSB of the address to get the gyro 
 	// to do slave-transmit subaddress updating.
-	Wire.write(L3G4200D_OUT_X_L | (1 << 7)); 
+	Wire.write(L3G_OUT_X_L | (1 << 7)); 
 	Wire.endTransmission();
 	Wire.requestFrom(address, (byte)6);
 
@@ -109,19 +109,19 @@ void L3G4200D::read()
 	g.z = zha << 8 | zla;
 }
 
-void L3G4200D::vector_cross(const vector *a,const vector *b, vector *out)
+void L3G::vector_cross(const vector *a,const vector *b, vector *out)
 {
   out->x = a->y*b->z - a->z*b->y;
   out->y = a->z*b->x - a->x*b->z;
   out->z = a->x*b->y - a->y*b->x;
 }
 
-float L3G4200D::vector_dot(const vector *a,const vector *b)
+float L3G::vector_dot(const vector *a,const vector *b)
 {
   return a->x*b->x+a->y*b->y+a->z*b->z;
 }
 
-void L3G4200D::vector_normalize(vector *a)
+void L3G::vector_normalize(vector *a)
 {
   float mag = sqrt(vector_dot(a,a));
   a->x /= mag;
@@ -131,17 +131,17 @@ void L3G4200D::vector_normalize(vector *a)
 
 // Private Methods //////////////////////////////////////////////////////////////
 
-bool L3G4200D::autoDetectAddress(void)
+bool L3G::autoDetectAddress(void)
 {
 	// try each possible address and stop if reading WHO_AM_I returns the expected response
 	address = L3G4200D_ADDRESS_SDO_LOW;
-	if (readReg(L3G4200D_WHO_AM_I) == 0xD3) return true;
+	if (readReg(L3G_WHO_AM_I) == 0xD3) return true;
 	address = L3G4200D_ADDRESS_SDO_HIGH;
-	if (readReg(L3G4200D_WHO_AM_I) == 0xD3) return true;
+	if (readReg(L3G_WHO_AM_I) == 0xD3) return true;
 	address = L3GD20_ADDRESS_SDO_LOW;
-	if (readReg(L3G4200D_WHO_AM_I) == 0xD4) return true;
+	if (readReg(L3G_WHO_AM_I) == 0xD4) return true;
 	address = L3GD20_ADDRESS_SDO_HIGH;
-	if (readReg(L3G4200D_WHO_AM_I) == 0xD4) return true;
+	if (readReg(L3G_WHO_AM_I) == 0xD4) return true;
 	
 	return false;
 }

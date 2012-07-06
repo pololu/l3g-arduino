@@ -1,12 +1,18 @@
 #include <Wire.h>
-#include <L3G4200D.h>
+#include <L3G.h>
 
-L3G4200D gyro;
+L3G gyro;
 
 void setup() {
   Serial.begin(9600);
   Wire.begin();
-  gyro.init();
+  
+  if (!gyro.init())
+  {
+    Serial.println("Failed to autodetect gyro type!");
+    while (1);
+  }
+
   gyro.enableDefault();
 }
 
