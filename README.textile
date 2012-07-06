@@ -18,7 +18,7 @@ h2. Getting Started
 
 h3. Software
 
-Download the archive from "GitHub":https://github.com/pololu/L3G, decompress it, and move the "L3G" folder into the "libraries" subdirectory inside your Arduino sketchbook directory. You can view your sketchbook location by selecting File->Preferences in the Arduino environment; if there is not already a "libraries" folder in that location, you should create it yourself. After installing the library, restart the Arduino environment so it can find the L3G library and its examples.
+Download the archive from "GitHub":https://github.com/pololu/L3G, decompress it, and move the "L3G" folder into the "libraries" subdirectory inside your Arduino sketchbook directory. You can view your sketchbook location by selecting File->Preferences in the Arduino environment; if there is not already a "libraries" folder in that location, you should create it yourself. After installing the library, restart the Arduino environment so it can find the L3G library and its example.
 
 h3. Hardware
 
