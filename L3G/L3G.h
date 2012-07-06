@@ -10,7 +10,7 @@
 #define L3GD20_DEVICE   2
 
 
-// SDO states
+// SA0 states
 
 #define L3G_SA0_LOW  0
 #define L3G_SA0_HIGH 1
