@@ -12,9 +12,9 @@
 
 // SDO states
 
-#define L3G_SDO_LOW  0
-#define L3G_SDO_HIGH 1
-#define L3G_SDO_AUTO 2
+#define L3G_SA0_LOW  0
+#define L3G_SA0_HIGH 1
+#define L3G_SA0_AUTO 2
 
 // register addresses
 
@@ -59,7 +59,7 @@ class L3G
 		
 		vector g; // gyro angular velocity readings
 
-		bool init(byte device = L3G_DEVICE_AUTO, byte sdo = L3G_SDO_AUTO);
+		bool init(byte device = L3G_DEVICE_AUTO, byte sa0 = L3G_SA0_AUTO);
 		
 		void enableDefault(void);
 		

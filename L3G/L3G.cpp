@@ -6,27 +6,27 @@
 
 // The Arduino two-wire interface uses a 7-bit number for the address, 
 // and sets the last bit correctly based on reads and writes
-#define L3G4200D_ADDRESS_SDO_LOW  (0xD0 >> 1)
-#define L3G4200D_ADDRESS_SDO_HIGH (0xD2 >> 1)
-#define L3GD20_ADDRESS_SDO_LOW    (0xD4 >> 1)
-#define L3GD20_ADDRESS_SDO_HIGH   (0xD6 >> 1)
+#define L3G4200D_ADDRESS_SA0_LOW  (0xD0 >> 1)
+#define L3G4200D_ADDRESS_SA0_HIGH (0xD2 >> 1)
+#define L3GD20_ADDRESS_SA0_LOW    (0xD4 >> 1)
+#define L3GD20_ADDRESS_SA0_HIGH   (0xD6 >> 1)
 
 // Public Methods //////////////////////////////////////////////////////////////
 
-bool L3G::init(byte device, byte sdo)
+bool L3G::init(byte device, byte sa0)
 {	
 	_device = device;
 	switch (_device)
 	{
 		case L3G4200D_DEVICE:
-			if (sdo == L3G_SDO_LOW)
+			if (sa0 == L3G_SA0_LOW)
 			{
-				address = L3G4200D_ADDRESS_SDO_LOW;
+				address = L3G4200D_ADDRESS_SA0_LOW;
 				return true;
 			}
-			else if (sdo == L3G_SDO_HIGH)
+			else if (sa0 == L3G_SA0_HIGH)
 			{
-				address = L3G4200D_ADDRESS_SDO_HIGH;
+				address = L3G4200D_ADDRESS_SA0_HIGH;
 				return true;
 			}
 			else
@@ -34,14 +34,14 @@ bool L3G::init(byte device, byte sdo)
 			break;	
 		
 		case L3GD20_DEVICE:
-			if (sdo == L3G_SDO_LOW)
+			if (sa0 == L3G_SA0_LOW)
 			{
-				address = L3GD20_ADDRESS_SDO_LOW;
+				address = L3GD20_ADDRESS_SA0_LOW;
 				return true;
 			}
-			else if (sdo == L3G_SDO_HIGH)
+			else if (sa0 == L3G_SA0_HIGH)
 			{
-				address = L3GD20_ADDRESS_SDO_HIGH;
+				address = L3GD20_ADDRESS_SA0_HIGH;
 				return true;
 			}
 			else
@@ -134,13 +134,13 @@ void L3G::vector_normalize(vector *a)
 bool L3G::autoDetectAddress(void)
 {
 	// try each possible address and stop if reading WHO_AM_I returns the expected response
-	address = L3G4200D_ADDRESS_SDO_LOW;
+	address = L3G4200D_ADDRESS_SA0_LOW;
 	if (readReg(L3G_WHO_AM_I) == 0xD3) return true;
-	address = L3G4200D_ADDRESS_SDO_HIGH;
+	address = L3G4200D_ADDRESS_SA0_HIGH;
 	if (readReg(L3G_WHO_AM_I) == 0xD3) return true;
-	address = L3GD20_ADDRESS_SDO_LOW;
+	address = L3GD20_ADDRESS_SA0_LOW;
 	if (readReg(L3G_WHO_AM_I) == 0xD4) return true;
-	address = L3GD20_ADDRESS_SDO_HIGH;
+	address = L3GD20_ADDRESS_SA0_HIGH;
 	if (readReg(L3G_WHO_AM_I) == 0xD4) return true;
 	
 	return false;

@@ -1,0 +1,9 @@
+L3G	KEYWORD1
+init	KEYWORD2
+enableDefault	KEYWORD2
+writeReg	KEYWORD2
+readReg	KEYWORD2
+read	KEYWORD2
+vector_cross	KEYWORD2
+vector_dot	KEYWORD2
+vector_normalize	KEYWORD2
