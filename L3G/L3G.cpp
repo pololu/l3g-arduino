@@ -97,16 +97,17 @@ void L3G::read()
 
   while (Wire.available() < 6);
   
-  uint8_t xla = Wire.read();
-  uint8_t xha = Wire.read();
-  uint8_t yla = Wire.read();
-  uint8_t yha = Wire.read();
-  uint8_t zla = Wire.read();
-  uint8_t zha = Wire.read();
+  uint8_t xlg = Wire.read();
+  uint8_t xhg = Wire.read();
+  uint8_t ylg = Wire.read();
+  uint8_t yhg = Wire.read();
+  uint8_t zlg = Wire.read();
+  uint8_t zhg = Wire.read();
 
-  g.x = xha << 8 | xla;
-  g.y = yha << 8 | yla;
-  g.z = zha << 8 | zla;
+  // combine high and low bytes
+  g.x = (int16_t)(xhg << 8 | xlg);
+  g.y = (int16_t)(yhg << 8 | ylg);
+  g.z = (int16_t)(zhg << 8 | zlg);
 }
 
 void L3G::vector_cross(const vector *a,const vector *b, vector *out)
