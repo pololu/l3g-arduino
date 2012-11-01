@@ -1,7 +1,7 @@
 h1. Arduino library for Pololu L3G4200D and L3GD20 boards
 
 Version: 1.2.1
-Release Date: 2011-10-31
+Release Date: 2012-10-31
 "www.pololu.com":http://www.pololu.com/
 
 h2. Summary
