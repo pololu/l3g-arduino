@@ -1,16 +1,17 @@
 h1. Arduino library for Pololu L3G4200D and L3GD20 boards
 
-Version: 1.2.0
-Release Date: 2011-07-06
+Version: 1.2.1
+Release Date: 2011-10-31
 "www.pololu.com":http://www.pololu.com/
 
 h2. Summary
 
 This is a library for the "Arduino":http://pololu.com/catalog/product/2191 that interfaces with L3G4200D and L3GD20 gyros on Pololu boards. It makes it simple to read the raw gyro data from these boards:
 
+* "L3GD20 3-axis gyro carrier":http://www.pololu.com/catalog/product/2125
 * "L3G4200D 3-axis gyro carrier":http://www.pololu.com/catalog/product/1272
 * "MinIMU-9 v2 L3GD20 and LSM303DLHC carrier":http://www.pololu.com/catalog/product/1268
-* "MinIMU-9 L3G4200D and LSM303DLM carrier":http://www.pololu.com/catalog/product/1265
+* "MinIMU-9 L3G4200D and LSM303DLM carrier":http://www.pololu.com/catalog/product/1265 (discontinued)
 * "MinIMU-9 L3G4200D and LSM303DLH carrier":http://www.pololu.com/catalog/product/1264 (discontinued)
 
 
@@ -65,6 +66,7 @@ This library is very similar to our earlier "L3G4200D":https://github.com/pololu
 
 h2. Version History
 
-* 1.2.0 (2012-07-06): Renamed library to L3G and added support support for L3GD20.
+* 1.2.1 (2012-10-31): Cast sensor readings to 16-bit ints for better portability.
+* 1.2.0 (2012-07-06): Renamed library to L3G and added support for L3GD20.
 * 1.1.0 (2011-12-12): Arduino 1.0 compatibility.
 * 1.0.0 (2011-09-14): Original release of L3G4200D library.
