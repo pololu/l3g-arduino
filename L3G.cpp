@@ -4,7 +4,7 @@
 
 // Defines ////////////////////////////////////////////////////////////////
 
-// The Arduino two-wire interface uses a 7-bit number for the address, 
+// The Arduino two-wire interface uses a 7-bit number for the address,
 // and sets the last bit correctly based on reads and writes
 #define L3G4200D_ADDRESS_SA0_LOW  (0xD0 >> 1)
 #define L3G4200D_ADDRESS_SA0_HIGH (0xD2 >> 1)
@@ -14,7 +14,7 @@
 // Public Methods //////////////////////////////////////////////////////////////
 
 bool L3G::init(byte device, byte sa0)
-{  
+{
   _device = device;
   switch (_device)
   {
@@ -31,8 +31,8 @@ bool L3G::init(byte device, byte sa0)
       }
       else
         return autoDetectAddress();
-      break;  
-    
+      break;
+
     case L3GD20_DEVICE:
       if (sa0 == L3G_SA0_LOW)
       {
@@ -46,8 +46,8 @@ bool L3G::init(byte device, byte sa0)
       }
       else
         return autoDetectAddress();
-      break;  
-      
+      break;
+
     default:
       return autoDetectAddress();
   }
@@ -74,14 +74,14 @@ void L3G::writeReg(byte reg, byte value)
 byte L3G::readReg(byte reg)
 {
   byte value;
-  
+
   Wire.beginTransmission(address);
   Wire.write(reg);
   Wire.endTransmission();
   Wire.requestFrom(address, (byte)1);
   value = Wire.read();
   Wire.endTransmission();
-  
+
   return value;
 }
 
@@ -89,24 +89,25 @@ byte L3G::readReg(byte reg)
 void L3G::read()
 {
   Wire.beginTransmission(address);
-  // assert the MSB of the address to get the gyro 
+  // assert the MSB of the address to get the gyro
   // to do slave-transmit subaddress updating.
-  Wire.write(L3G_OUT_X_L | (1 << 7)); 
+  Wire.write(L3G_OUT_X_L | (1 << 7));
   Wire.endTransmission();
   Wire.requestFrom(address, (byte)6);
 
   while (Wire.available() < 6);
-  
-  uint8_t xla = Wire.read();
-  uint8_t xha = Wire.read();
-  uint8_t yla = Wire.read();
-  uint8_t yha = Wire.read();
-  uint8_t zla = Wire.read();
-  uint8_t zha = Wire.read();
 
-  g.x = xha << 8 | xla;
-  g.y = yha << 8 | yla;
-  g.z = zha << 8 | zla;
+  uint8_t xlg = Wire.read();
+  uint8_t xhg = Wire.read();
+  uint8_t ylg = Wire.read();
+  uint8_t yhg = Wire.read();
+  uint8_t zlg = Wire.read();
+  uint8_t zhg = Wire.read();
+
+  // combine high and low bytes
+  g.x = (int16_t)(xhg << 8 | xlg);
+  g.y = (int16_t)(yhg << 8 | ylg);
+  g.z = (int16_t)(zhg << 8 | zlg);
 }
 
 void L3G::vector_cross(const vector *a,const vector *b, vector *out)
@@ -142,6 +143,6 @@ bool L3G::autoDetectAddress(void)
   if (readReg(L3G_WHO_AM_I) == 0xD4) return true;
   address = L3GD20_ADDRESS_SA0_HIGH;
   if (readReg(L3G_WHO_AM_I) == 0xD4) return true;
-  
+
   return false;
 }
