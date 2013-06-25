@@ -10,9 +10,10 @@ This is a library for the "Arduino":http://pololu.com/catalog/product/2191 that 
 
 * "L3GD20 3-axis gyro carrier":http://www.pololu.com/catalog/product/2125
 * "L3G4200D 3-axis gyro carrier":http://www.pololu.com/catalog/product/1272
-* "MinIMU-9 v2 L3GD20 and LSM303DLHC carrier":http://www.pololu.com/catalog/product/1268
-* "MinIMU-9 L3G4200D and LSM303DLM carrier":http://www.pololu.com/catalog/product/1265 (discontinued)
-* "MinIMU-9 L3G4200D and LSM303DLH carrier":http://www.pololu.com/catalog/product/1264 (discontinued)
+* "MinIMU-9 v2 &#40;L3GD20 and LSM303DLHC carrier)":http://www.pololu.com/catalog/product/1268
+* "AltIMU-10 &#40;L3GD20, LSM303DLHC, and LSM331AP carrier)":http://www.pololu.com/catalog/product/1269
+* "MinIMU-9 &#40;L3G4200D and LSM303DLM carrier)":http://www.pololu.com/catalog/product/1265 (discontinued)
+* "MinIMU-9 &#40;L3G4200D and LSM303DLH carrier)":http://www.pololu.com/catalog/product/1264 (discontinued)
 
 
 h2. Getting Started
