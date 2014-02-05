@@ -1,20 +1,20 @@
-h1. Arduino library for Pololu L3G4200D and L3GD20 boards
+h1. Arduino library for Pololu L3G boards
 
-Version: 1.2.1
-Release Date: 2012-10-31
+Version: 1.2.2
+Release Date: 2014-02-05
 "www.pololu.com":http://www.pololu.com/
 
 h2. Summary
 
-This is a library for the "Arduino":http://pololu.com/catalog/product/2191 that interfaces with L3G4200D and L3GD20 gyros on Pololu boards. It makes it simple to read the raw gyro data from these boards:
+This is a library for the "Arduino":http://pololu.com/catalog/product/2191 that interfaces with L3GD20H, L3GD20, and L3G4200D gyros on Pololu boards. It makes it simple to read the raw gyro data from these boards:
 
+* "L3GD20H 3-axis gyro carrier":http://www.pololu.com/catalog/product/2129
 * "L3GD20 3-axis gyro carrier":http://www.pololu.com/catalog/product/2125
 * "L3G4200D 3-axis gyro carrier":http://www.pololu.com/catalog/product/1272
-* "MinIMU-9 v2 &#40;L3GD20 and LSM303DLHC carrier)":http://www.pololu.com/catalog/product/1268
-* "AltIMU-10 &#40;L3GD20, LSM303DLHC, and LSM331AP carrier)":http://www.pololu.com/catalog/product/1269
-* "MinIMU-9 &#40;L3G4200D and LSM303DLM carrier)":http://www.pololu.com/catalog/product/1265 (discontinued)
-* "MinIMU-9 &#40;L3G4200D and LSM303DLH carrier)":http://www.pololu.com/catalog/product/1264 (discontinued)
-
+* "MinIMU-9 v2 <notextile>(L3GD20 and LSM303DLHC carrier)</notextile>":http://www.pololu.com/catalog/product/1268
+* "AltIMU-10 <notextile>(L3GD20, LSM303DLHC, and LSM331AP carrier)</notextile>":http://www.pololu.com/catalog/product/1269
+* "MinIMU-9 <notextile>(L3G4200D and LSM303DLM carrier)</notextile>":http://www.pololu.com/catalog/product/1265 (discontinued)
+* "MinIMU-9 <notextile>(L3G4200D and LSM303DLH carrier)</notextile>":http://www.pololu.com/catalog/product/1264 (discontinued)
 
 h2. Getting Started
 
@@ -24,19 +24,34 @@ Download the archive from "GitHub":https://github.com/pololu/L3G, decompress it,
 
 h3. Hardware
 
-Make the following connections with wires between the Arduino and the L3G4200D/L3GD20 board:
+Make the following connections with wires between the Arduino and the L3G board:
 
-pre. Arduino Uno/Duemilanove     L3G4200D/L3GD20 board
-                    5V  ->  VIN
-                   GND  ->  GND
-          Analog Pin 5  ->  SCL
-          Analog Pin 4  ->  SDA
+h4. Arduino Uno R3, Leonardo, Mega 2560
 
-pre. Arduino Mega                L3G4200D/L3GD20 board
-                    5V  ->  VIN
-                   GND  ->  GND
-        Digital Pin 21  ->  SCL
-        Digital Pin 20  ->  SDA
+pre. Arduino      L3G board
+----------------------
+     5V  ->  VIN
+    GND  ->  GND
+    SDA  ->  SDA
+    SCL  ->  SCL
+
+h4. Arduino Micro
+
+pre. Arduino      L3G board
+----------------------
+     5V  ->  VIN
+    GND  ->  GND
+      2  ->  SDA
+      3  ->  SCL
+
+h4. Arduino Uno (up to R2), Duemilanove, etc.
+
+pre. Arduino      L3G board
+----------------------
+     5V  ->  VIN
+    GND  ->  GND
+     A4  ->  SDA
+     A5  ->  SCL
 
 h2. Example Programs
 
@@ -67,6 +82,7 @@ This library is very similar to our earlier "L3G4200D":https://github.com/pololu
 
 h2. Version History
 
+* 1.2.2 (2014-02-05): Added support for L3GD20H.
 * 1.2.1 (2012-10-31): Cast sensor readings to 16-bit ints for better portability.
 * 1.2.0 (2012-07-06): Renamed library to L3G and added support for L3GD20.
 * 1.1.0 (2011-12-12): Arduino 1.0 compatibility.
