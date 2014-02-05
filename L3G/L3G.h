@@ -48,6 +48,8 @@
 #define L3G_INT1_THS_ZH   0x36
 #define L3G_INT1_THS_ZL   0x37
 #define L3G_INT1_DURATION 0x38
+#define L3G_LOW_ODR       0x39
+
 
 class L3G
 {

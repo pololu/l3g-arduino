@@ -140,9 +140,9 @@ bool L3G::autoDetectAddress(void)
   address = L3G4200D_ADDRESS_SA0_HIGH;
   if (readReg(L3G_WHO_AM_I) == 0xD3) return true;
   address = L3GD20_ADDRESS_SA0_LOW;
-  if (readReg(L3G_WHO_AM_I) == 0xD4) return true;
+  if (readReg(L3G_WHO_AM_I) == 0xD4 || readReg(L3G_WHO_AM_I) == 0xD7) return true;
   address = L3GD20_ADDRESS_SA0_HIGH;
-  if (readReg(L3G_WHO_AM_I) == 0xD4) return true;
+  if (readReg(L3G_WHO_AM_I) == 0xD4 || readReg(L3G_WHO_AM_I) == 0xD7) return true;
 
   return false;
 }
