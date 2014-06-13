@@ -69,6 +69,11 @@ class L3G
     byte readReg(byte reg);
 
     void read(void);
+	
+	void setTimeout(unsigned int timeout);
+    unsigned int getTimeout(void);
+    bool timeoutOccurred(void);
+
 
     // vector functions
     static void vector_cross(const vector *a, const vector *b, vector *out);
@@ -78,6 +83,9 @@ class L3G
   private:
       byte _device; // chip type (4200D or D20)
       byte address;
+	  
+	  unsigned int io_timeout;
+	  bool did_timeout;
 
       bool autoDetectAddress(void);
 };
