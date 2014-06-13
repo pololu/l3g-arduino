@@ -63,8 +63,6 @@ class L3G
 
 	byte last_status; // status of last I2C transmission
 
-    L3G(void);
-	
     bool init(byte device = L3G_DEVICE_AUTO, byte sa0 = L3G_SA0_AUTO);
 
     void enableDefault(void);
