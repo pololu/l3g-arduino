@@ -96,7 +96,7 @@ void L3G::writeReg(byte reg, byte value)
   Wire.beginTransmission(address);
   Wire.write(reg);
   Wire.write(value);
-  Wire.endTransmission();
+  last_status = Wire.endTransmission();
 }
 
 // Reads a gyro register
@@ -106,7 +106,7 @@ byte L3G::readReg(byte reg)
 
   Wire.beginTransmission(address);
   Wire.write(reg);
-  Wire.endTransmission();
+  last_status = Wire.endTransmission();
   Wire.requestFrom(address, (byte)1);
   value = Wire.read();
   Wire.endTransmission();
