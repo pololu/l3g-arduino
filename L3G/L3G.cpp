@@ -11,7 +11,36 @@
 #define L3GD20_ADDRESS_SA0_LOW    (0xD4 >> 1)
 #define L3GD20_ADDRESS_SA0_HIGH   (0xD6 >> 1)
 
+// Constructors ////////////////////////////////////////////////////////////////
+
+L3G::L3G(void)
+{
+  _device = device_auto;
+
+  io_timeout = 0;  // 0 = no timeout
+  did_timeout = false;
+}
+
 // Public Methods //////////////////////////////////////////////////////////////
+
+// Did a timeout occur in read() since the last call to timeoutOccurred()?
+bool L3G::timeoutOccurred()
+{
+  bool tmp = did_timeout;
+  did_timeout = false;
+  return tmp;
+
+}
+
+void L3G::setTimeout(unsigned int timeout)
+{
+  io_timeout = timeout;
+}
+
+unsigned int L3G::getTimeout()
+{
+  return io_timeout;
+}
 
 bool L3G::init(byte device, byte sa0)
 {
@@ -94,8 +123,16 @@ void L3G::read()
   Wire.write(L3G_OUT_X_L | (1 << 7));
   Wire.endTransmission();
   Wire.requestFrom(address, (byte)6);
-
-  while (Wire.available() < 6);
+  
+  unsigned int millis_start = millis();
+  while (Wire.available() < 6){
+  {
+    if (io_timeout > 0 && ((unsigned int)millis() - millis_start) > io_timeout)
+    {
+      did_timeout = true;
+      return;
+    }
+  }
 
   uint8_t xlg = Wire.read();
   uint8_t xhg = Wire.read();
