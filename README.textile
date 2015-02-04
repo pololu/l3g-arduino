@@ -1,7 +1,7 @@
 h1. Arduino library for Pololu L3G boards
 
-Version: 1.2.2
-Release Date: 2014-02-05
+Version: 2.0.0
+Release Date: 2015-02-05
 "www.pololu.com":http://www.pololu.com/
 
 h2. Summary
@@ -10,11 +10,14 @@ This is a library for the "Arduino":http://pololu.com/catalog/product/2191 that 
 
 * "L3GD20H 3-axis gyro carrier":http://www.pololu.com/catalog/product/2129
 * "L3GD20 3-axis gyro carrier":http://www.pololu.com/catalog/product/2125
-* "MinIMU-9 v2 <notextile>(L3GD20 and LSM303DLHC carrier)</notextile>":http://www.pololu.com/catalog/product/1268
-* "AltIMU-10 <notextile>(L3GD20, LSM303DLHC, and LSM331AP carrier)</notextile>":http://www.pololu.com/catalog/product/1269
+* "MinIMU-9 v3 <notextile>(L3GD20H and LSM303D carrier)</notextile>":http://www.pololu.com/catalog/product/2468
+* "AltIMU-10 v4 <notextile>(L3GD20H, LSM303D, and LPS25H carrier)</notextile>":http://www.pololu.com/catalog/product/2470
+* "AltIMU-10 v3 <notextile>(L3GD20H, LSM303D, and LSM331AP carrier)</notextile>":http://www.pololu.com/catalog/product/2469
 * "L3G4200D 3-axis gyro carrier":http://www.pololu.com/catalog/product/1272 (discontinued)
+* "MinIMU-9 v2 <notextile>(L3GD20 and LSM303DLHC carrier)</notextile>":http://www.pololu.com/catalog/product/1268
 * "MinIMU-9 <notextile>(L3G4200D and LSM303DLM carrier)</notextile>":http://www.pololu.com/catalog/product/1265 (discontinued)
 * "MinIMU-9 <notextile>(L3G4200D and LSM303DLH carrier)</notextile>":http://www.pololu.com/catalog/product/1264 (discontinued)
+* "AltIMU-10 <notextile>(L3GD20, LSM303DLHC, and LPS331AP carrier)</notextile>":http://www.pololu.com/catalog/product/1269 (discontinued)
 
 h2. Getting Started
 
@@ -67,9 +70,11 @@ pre. G X: 188 Y: -10 Z: -47
 G X: 138 Y: -40 Z: -26
 G X: 110 Y: -55 Z: 4
 
+See the comments in this sketch for some notes on how to convert the raw sensor values to units of dps (degrees per second).
+
 h2. Other Library Applications
 
-These programs make use of the L3G library but are not included with in the library archive or repository.
+These programs make use of the L3G library but are not included in the library archive or repository.
 
 - "MinIMU-9 + Arduino AHRS":https://github.com/pololu/minimu-9-ahrs-arduino := This sketch allows an Arduino connected to a MinIMU-9 or AltIMU-10 to function as an attitude and heading reference system, calculating estimated roll, pitch, and yaw angles from sensor readings that can be visualized with a 3D test program on a PC. It is based on the work of Jordi Munoz, William Premerlani, Jose Julio, and Doug Weibel.
 - "Pololu_Open_IMU":https://github.com/mikeshub/Pololu_Open_IMU/tree/master/Pololu_Open_IMU by mikeshub := This is an alternative AHRS implementation that uses the "Madgwick algorithm":http://www.x-io.co.uk/open-source-imu-and-ahrs-algorithms/.
@@ -77,20 +82,30 @@ These programs make use of the L3G library but are not included with in the libr
 
 h2. Library Reference
 
-- @vector g@ := The last values read from the gyro.
-- @bool init(byte device, byte sa0)@ := Initializes the library with the device being used (L3G4200D or L3GD20) and the state of the SA0 (slave address least significant bit) pin. Constants for these arguments are defined in L3G.h. Both of these arguments are optional; if they are not specified, the library will try to automatically detect the device and slave address, and it will return a boolean indicating whether the autodetection was succesful.
-*Note:* Automatic detection of the device type currently does not work with the Arduino Due because of issues with its Wire library. To work around this, specify the device and SA0 state manually (e.g. @init(L3GD20_DEVICE, L3G_SA0_HIGH)@).
-- @void enableDefault(void)@ := Turns on the gyro in the default configuration.
-- @void writeReg(byte reg, byte value)@ := Writes a gyro register with the given value. Register address constants are defined in L3G.h.
+- @vector<int16_t> g@ := The last values read from the gyro.
+- @byte last_status@ := The status of the last I2C transmission. See the "@Wire.endTransmission()@ documentation":http://arduino.cc/en/Reference/WireEndTransmission for return values.
+
+- @L3G(void)@ := Constructor.
+- @bool init(byte device, byte sa0)@ := Initializes the library with the device being used (@device_4200D@, @device_D20@, @device_D20H@, or @device_auto@) and the state of the SA0 pin (@sa0_low@, @sa0_high@, or @sa0_auto@), which determines the least significant bit of the I²C slave address. Constants for these arguments are defined in L3G.h. Both of these arguments are optional; if they are not specified, the library will try to automatically detect the device and slave address, and it will return a boolean indicating whether the type of L3G device was successfully determined (if necessary).
+*Note:* Automatic detection of the device type currently does not work with the Arduino Due because of issues with its Wire library. To work around this, specify the device and SA0 state manually (e.g. @init(L3G::device_D20, L3G::sa0_high)@).
+- @byte getDeviceType(void)@ := Returns the device type specified to or detected by @init()@.
+- @void enableDefault(void)@ := Turns on the gyro and enables a consistent set of default settings.
+This function will set the gyro's full scale to be +/-250 dps (degrees per second), which means that a reading of 114 corresponds to approximately 1 dps. See the comments in L3G.cpp for a full explanation of these settings.
+- @void writeReg(byte reg, byte value)@ := Writes a gyro register with the given value. Register address constants are defined by the regAddr enumeration type in L3G.h.
+Example use: @gyro.writeReg(L3G::CTRL_REG1, 0x6F);@
 - @byte readReg(byte reg)@ := Reads a gyro register and returns the value read.
 - @void read(void)@ := Takes a reading from the gyro and stores the values in the vector @g@.
-
-h3. Differences from the L3G4200D library
-
-This library is very similar to our earlier "L3G4200D":https://github.com/pololu/L3G4200D library, which is not compatible with the L3GD20. Besides the name change, the main difference in this library is that you need to call the @init()@ function before using any of the other library functions, typically from within the Arduino @setup()@ function. While the older library only works with the Pololu boards' default gyro slave address of 1101001b, this library allows you to specify the slave address with the @init()@ function.
+- @void setTimeout(unsigned int timeout)@ := Sets a timeout period for @read()@, in milliseconds, after which it will abort if no data is received. A value of 0 disables the timeout.
+- @unsigned int getTimeout(void)@ := Returns the current timeout period setting.
+- @bool timeoutOccurred(void)@ := Returns a boolean indicating whether a call to @read()@ has timed out since the last call to @timeoutOccurred()@.
 
 h2. Version History
 
+* 2.0.0 (2015-02-05): Major rewrite, making library more consistent with LSM303 library. List of significant changes:
+** @enableDefault()@ behavior changed to be more explicit and consistent across devices.
+** Library constants converted to enums.
+** L3GD20H is now detected as a distinct device (instead of being treated as an L3GD20) and constants have been added for the register names specified in its datasheet.
+** Added timeout functions from LSM303 library.
 * 1.2.2 (2014-02-05): Added support for L3GD20H.
 * 1.2.1 (2012-10-31): Cast sensor readings to 16-bit ints for better portability.
 * 1.2.0 (2012-07-06): Renamed library to L3G and added support for L3GD20.

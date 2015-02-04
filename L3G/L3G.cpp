@@ -125,7 +125,8 @@ bool L3G::init(deviceType device, sa0State sa0)
 
 /*
 Enables the L3G's gyro. Also:
-- Sets gyro full scale (gain) to default power-on value of +/- 250 dps.
+- Sets gyro full scale (gain) to default power-on value of +/- 250 dps
+  (specified as +/- 245 dps for L3GD20H).
 - Selects 200 Hz ODR (output data rate). (Exact rate is specified as 189.4 Hz
   for L3GD20H and 190 Hz for L3GD20.)
 Note that this function will also reset other settings controlled by
@@ -137,16 +138,16 @@ void L3G::enableDefault(void)
   {
     // 0x00 = 0b00000000
     // Low_ODR = 0 (low speed ODR disabled)
-    writeReg(L3G::LOW_ODR, 0x00);
+    writeReg(LOW_ODR, 0x00);
   }
   
   // 0x00 = 0b00000000
   // FS = 00 (+/- 250 dps full scale)
-  writeReg(L3G::CTRL_REG4, 0x00);
+  writeReg(CTRL_REG4, 0x00);
   
   // 0x6F = 0b01101111
   // DR = 01 (200 Hz ODR); BW = 10 (50 Hz bandwidth); PD = 1 (normal mode); Zen = Yen = Xen = 1 (all axes enabled)
-  writeReg(L3G::CTRL_REG1, 0x6F);
+  writeReg(CTRL_REG1, 0x6F);
 }
 
 // Writes a gyro register
@@ -179,7 +180,7 @@ void L3G::read()
   Wire.beginTransmission(address);
   // assert the MSB of the address to get the gyro
   // to do slave-transmit subaddress updating.
-  Wire.write(L3G::OUT_X_L | (1 << 7));
+  Wire.write(OUT_X_L | (1 << 7));
   Wire.endTransmission();
   Wire.requestFrom(address, (byte)6);
   
