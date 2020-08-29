@@ -1,5 +1,4 @@
 #include <L3G.h>
-#include <Wire.h>
 #include <math.h>
 
 // Defines ////////////////////////////////////////////////////////////////
@@ -47,10 +46,11 @@ unsigned int L3G::getTimeout()
   return io_timeout;
 }
 
-bool L3G::init(deviceType device, sa0State sa0)
+bool L3G::init(TwoWire *theWire, deviceType device, sa0State sa0)
 {
+  wire = theWire;
   int id;
-  
+
   // perform auto-detection unless device type and SA0 state were both specified
   if (device == device_auto || sa0 == sa0_auto)
   {
@@ -153,10 +153,10 @@ void L3G::enableDefault(void)
 // Writes a gyro register
 void L3G::writeReg(byte reg, byte value)
 {
-  Wire.beginTransmission(address);
-  Wire.write(reg);
-  Wire.write(value);
-  last_status = Wire.endTransmission();
+  wire->beginTransmission(address);
+  wire->write(reg);
+  wire->write(value);
+  last_status = wire->endTransmission();
 }
 
 // Reads a gyro register
@@ -164,12 +164,12 @@ byte L3G::readReg(byte reg)
 {
   byte value;
 
-  Wire.beginTransmission(address);
-  Wire.write(reg);
-  last_status = Wire.endTransmission();
-  Wire.requestFrom(address, (byte)1);
-  value = Wire.read();
-  Wire.endTransmission();
+  wire->beginTransmission(address);
+  wire->write(reg);
+  last_status = wire->endTransmission();
+  wire->requestFrom(address, (byte)1);
+  value = wire->read();
+  wire->endTransmission();
 
   return value;
 }
@@ -177,15 +177,15 @@ byte L3G::readReg(byte reg)
 // Reads the 3 gyro channels and stores them in vector g
 void L3G::read()
 {
-  Wire.beginTransmission(address);
+  wire->beginTransmission(address);
   // assert the MSB of the address to get the gyro
   // to do slave-transmit subaddress updating.
-  Wire.write(OUT_X_L | (1 << 7));
-  Wire.endTransmission();
-  Wire.requestFrom(address, (byte)6);
+  wire->write(OUT_X_L | (1 << 7));
+  wire->endTransmission();
+  wire->requestFrom(address, (byte)6);
   
   unsigned int millis_start = millis();
-  while (Wire.available() < 6)
+  while (wire->available() < 6)
   {
     if (io_timeout > 0 && ((unsigned int)millis() - millis_start) > io_timeout)
     {
@@ -194,12 +194,12 @@ void L3G::read()
     }
   }
 
-  uint8_t xlg = Wire.read();
-  uint8_t xhg = Wire.read();
-  uint8_t ylg = Wire.read();
-  uint8_t yhg = Wire.read();
-  uint8_t zlg = Wire.read();
-  uint8_t zhg = Wire.read();
+  uint8_t xlg = wire->read();
+  uint8_t xhg = wire->read();
+  uint8_t ylg = wire->read();
+  uint8_t yhg = wire->read();
+  uint8_t zlg = wire->read();
+  uint8_t zhg = wire->read();
 
   // combine high and low bytes
   g.x = (int16_t)(xhg << 8 | xlg);
@@ -219,17 +219,17 @@ void L3G::vector_normalize(vector<float> *a)
 
 int L3G::testReg(byte address, regAddr reg)
 {
-  Wire.beginTransmission(address);
-  Wire.write((byte)reg);
-  if (Wire.endTransmission() != 0)
+  wire->beginTransmission(address);
+  wire->write((byte)reg);
+  if (wire->endTransmission() != 0)
   {
     return TEST_REG_ERROR;
   }
 
-  Wire.requestFrom(address, (byte)1);
-  if (Wire.available())
+  wire->requestFrom(address, (byte)1);
+  if (wire->available())
   {
-    return Wire.read();
+    return wire->read();
   }
   else
   {
