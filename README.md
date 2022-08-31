@@ -14,13 +14,13 @@ boards:
 
 * [L3GD20H 3-axis gyro carrier](https://www.pololu.com/catalog/product/2129)
 * [L3GD20 3-axis gyro carrier](https://www.pololu.com/catalog/product/2125)
-* [MinIMU-9 v3 (L3GD20H and LSM303D carrier)](https://www.pololu.com/catalog/product/2468)
-* [AltIMU-10 v4 (L3GD20H, LSM303D, and LPS25H carrier)](https://www.pololu.com/catalog/product/2470)
-* [AltIMU-10 v3 (L3GD20H, LSM303D, and LSM331AP carrier)](https://www.pololu.com/catalog/product/2469)
 * [L3G4200D 3-axis gyro carrier](https://www.pololu.com/catalog/product/1272) (discontinued)
+* [MinIMU-9 v3 (L3GD20H and LSM303D carrier)](https://www.pololu.com/catalog/product/2468) (discontinued)
 * [MinIMU-9 v2 (L3GD20 and LSM303DLHC carrier)](https://www.pololu.com/catalog/product/1268) (discontinued)
 * [MinIMU-9 (L3G4200D and LSM303DLM carrier)](https://www.pololu.com/catalog/product/1265) (discontinued)
 * [MinIMU-9 (L3G4200D and LSM303DLH carrier)](https://www.pololu.com/catalog/product/1264) (discontinued)
+* [AltIMU-10 v4 (L3GD20H, LSM303D, and LPS25H carrier)](https://www.pololu.com/catalog/product/2470) (discontinued)
+* [AltIMU-10 v3 (L3GD20H, LSM303D, and LSM331AP carrier)](https://www.pololu.com/catalog/product/2469) (discontinued)
 * [AltIMU-10 (L3GD20, LSM303DLHC, and LPS331AP carrier)](https://www.pololu.com/catalog/product/1269) (discontinued)
 
 ## Getting Started
