@@ -134,8 +134,8 @@ library archive or repository.
   [`Wire.endTransmission()` documentation](https://arduino.cc/en/Reference/WireEndTransmission)
   for return values.
 - `L3G(void)` <br> Constructor.
-- `bool init(byte device, byte sa0)` <br> Initializes the library with
-  the device being used (`device_4200D`, `device_D20`, `device_D20H`,
+- `bool init(TwoWire theWire, byte device, byte sa0)` <br> Initializes the library with
+  the Wire, the device being used (`device_4200D`, `device_D20`, `device_D20H`,
   or `device_auto`) and the state of the SA0 pin (`sa0_low`,
   `sa0_high`, or `sa0_auto`), which determines the least significant
   bit of the I²C slave address. Constants for these arguments are

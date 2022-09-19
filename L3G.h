@@ -2,6 +2,7 @@
 #define L3G_h
 
 #include <Arduino.h> // for byte data type
+#include <Wire.h> // for byte data type
 
 class L3G
 {
@@ -74,7 +75,7 @@ class L3G
 
     L3G(void);
 
-    bool init(deviceType device = device_auto, sa0State sa0 = sa0_auto);
+    bool init(TwoWire *wire = &Wire, deviceType device = device_auto, sa0State sa0 = sa0_auto);
     deviceType getDeviceType(void) { return _device; }
 
     void enableDefault(void);
@@ -98,6 +99,7 @@ class L3G
       byte address;
 
       unsigned int io_timeout;
+      TwoWire *wire;
       bool did_timeout;
 
       int testReg(byte address, regAddr reg);
